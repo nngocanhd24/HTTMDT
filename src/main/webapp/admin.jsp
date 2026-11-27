@@ -56,12 +56,6 @@
           <span>Xử Lý Khiếu Nại</span>
           <span class="tab-badge-pill adm-8" id="badgePendingDisputes">0</span>
         </a>
-
-        <!-- 4. Lịch sử giao dịch -->
-        <a href="#recon" class="nav-link-item" data-tab="tab-admin-recon">
-          <i data-lucide="coins"></i>
-          <span>Lịch Sử Giao Dịch</span>
-        </a>
       </nav>
 
       <div class="sidebar-footer">
@@ -426,36 +420,6 @@
           </div>
         </section>
 
-        <!-- ========================================================================= -->
-        <!-- TAB 4: LỊCH SỬ GIAO DỊCH TOÀN SÀN -->
-        <!-- ========================================================================= -->
-        <section class="tab-content-panel" id="tab-admin-recon">
-          <div class="card-table-wrapper">
-            <div class="card-table-header">
-              <h3>Lịch Sử Giao Dịch Toàn Sàn (Ký Quỹ Escrow, Tất Toán & Hoàn Tiền)</h3>
-              <div class="adm-70">
-                Phí dịch vụ cố định: <strong>10%</strong>
-              </div>
-            </div>
-            <table class="custom-table">
-              <thead>
-                <tr>
-                  <th>Mã GD</th>
-                  <th>Mã Chuyến Đi</th>
-                  <th>Loại Giao Dịch</th>
-                  <th>Nội Dung Giao Dịch</th>
-                  <th>Số Tiền</th>
-                  <th>Thời Gian</th>
-                  <th>Trạng Thái</th>
-                </tr>
-              </thead>
-              <tbody id="admTransactionsTableBody">
-                <!-- Render dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </section>
-
       </div>
     </main>
 
@@ -645,7 +609,6 @@
           'tab-admin-dashboard': 'Báo Cáo Thống Kê Toàn Hệ Thống',
           'tab-admin-users': 'Quản Lý Tài Khoản & Thẩm Định Thẻ Hướng Dẫn Viên',
           'tab-admin-disputes': 'Trung Tâm Xử Lý Khiếu Nại & Tranh Chấp',
-          'tab-admin-recon': 'Lịch Sử Giao Dịch Toàn Sàn',
         };
 
         const hashToTab = {
@@ -654,16 +617,13 @@
           '#users': 'tab-admin-users',
           '#tab-admin-users': 'tab-admin-users',
           '#disputes': 'tab-admin-disputes',
-          '#tab-admin-disputes': 'tab-admin-disputes',
-          '#recon': 'tab-admin-recon',
-          '#tab-admin-recon': 'tab-admin-recon'
+          '#tab-admin-disputes': 'tab-admin-disputes'
         };
 
         const tabToHash = {
           'tab-admin-dashboard': '#dashboard',
           'tab-admin-users': '#users',
-          'tab-admin-disputes': '#disputes',
-          'tab-admin-recon': '#recon'
+          'tab-admin-disputes': '#disputes'
         };
 
         function activateAdminTab(targetId, updateHash = true) {
@@ -701,7 +661,6 @@
             if (targetId === 'tab-admin-dashboard') handleGenerateReport();
             if (targetId === 'tab-admin-users') renderAdminUsers();
             if (targetId === 'tab-admin-disputes') renderAdminDisputes();
-            if (targetId === 'tab-admin-recon') renderAdminTransactions();
           } catch (err) {
             console.error('Lỗi khi render tab admin ' + targetId, err);
           }
@@ -727,7 +686,7 @@
           }
         });
 
-        // Tự động kích hoạt tab dựa trên hash URL (ví dụ #recon, #disputes, #users, #dashboard)
+        // Tự động kích hoạt tab dựa trên hash URL (ví dụ #disputes, #users, #dashboard)
         const initialHash = window.location.hash;
         if (initialHash && hashToTab[initialHash]) {
           activateAdminTab(hashToTab[initialHash], false);
@@ -749,7 +708,6 @@
         handleGenerateReport();
         renderAdminUsers();
         renderAdminDisputes();
-        renderAdminTransactions();
         updateAdminBadges();
       }
 
@@ -1716,113 +1674,6 @@
         } catch (err) {
           console.error('Error confirming dispute decision:', err);
           showToast('Lỗi: ' + (err.message || err), 'error');
-        }
-      }
-
-      // =========================================================================
-      // 4. LỊCH SỬ GIAO DỊCH TOÀN SÀN
-      // =========================================================================
-      function renderAdminTransactions() {
-        const store = window.guidiaStore;
-        const txns = store.getTransactions();
-        const tbody = document.getElementById('admTransactionsTableBody');
-        if (!tbody) return;
-
-        const sortedTxns = [...txns].sort((a, b) => {
-          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : (a.timestamp ? new Date(a.timestamp).getTime() : 0);
-          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : (b.timestamp ? new Date(b.timestamp).getTime() : 0);
-          return (timeB - timeA) || ((b.dbTransactionId || 0) - (a.dbTransactionId || 0));
-        });
-
-        tbody.innerHTML = sortedTxns.map(t => {
-          let txnTitle = t.title || t.description || '';
-          if (!txnTitle) {
-            const typeStr = (t.type || '').toUpperCase();
-            const code = t.tripId || t.bookingCode || ('#' + (t.bookingId || t.dbBookingId || ''));
-            if (typeStr === 'ESCROW_HOLD' || typeStr === 'ESCROW') {
-              txnTitle = `Tạm giữ ký quỹ Escrow bảo vệ quyền lợi du khách cho chuyến đi ${code}`;
-            } else if (typeStr === 'SETTLE' || typeStr === 'PAYOUT') {
-              txnTitle = `Tất toán 90% thù lao chuyến đi ${code} cho Hướng Dẫn Viên`;
-            } else if (typeStr === 'PLATFORM_FEE' || typeStr === 'FEE') {
-              txnTitle = `Khấu trừ 10% phí hoa hồng vận hành sàn từ chuyến đi ${code}`;
-            } else if (typeStr === 'REFUND') {
-              txnTitle = `Hoàn tiền 100% tạm giữ cho du khách chuyến đi ${code}`;
-            } else {
-              txnTitle = `Giao dịch chuyến đi ${code}`;
-            }
-          }
-
-          const txnId = t.id || t.transactionCode || ('TXN-' + (t.dbTransactionId || ''));
-          const tripCode = t.tripId || t.bookingCode || '---';
-          const amountVal = Number(t.amount) || 0;
-          const timeStr = t.createdAt || t.timestamp || 'Gần đây';
-
-          return `
-    <tr>
-      <td><strong>${txnId}</strong></td>
-      <td><strong>${tripCode}</strong></td>
-      <td>${getTransactionTypeBadge(t.type)}</td>
-      <td style="max-width:320px; line-height:1.4;">${txnTitle}</td>
-      <td><strong style="color:#0284c7;">${amountVal.toLocaleString('vi-VN')}₫</strong></td>
-      <td style="white-space:nowrap; color:#475569; font-size:0.85rem;"><i data-lucide="clock" class="icon-xs" style="display:inline; vertical-align:middle; margin-right:4px;"></i>${timeStr}</td>
-      <td>
-        <span class="status-badge" style="background:#f0fdf4; color:#166534; border:1px solid #86efac; font-weight:700;">
-          <i data-lucide="check" class="icon-xs"></i> Thành Công
-        </span>
-      </td>
-    </tr>
-  `;
-        }).join('');
-
-        if (window.lucide) window.lucide.createIcons();
-      }
-
-      function getTransactionTypeBadge(type) {
-        const t = (type || '').toLowerCase();
-        if (t === 'escrow' || t === 'escrow_hold') {
-          return `<span class="status-badge badge-upcoming" style="background:#fef3c7; color:#92400e; border:1px solid #fcd34d; font-weight:700;"><i data-lucide="clock" class="icon-xs"></i> Tạm Giữ Escrow</span>`;
-        }
-        if (t === 'payout' || t === 'settle') {
-          return `<span class="status-badge badge-paid" style="background:#dcfce7; color:#15803d; border:1px solid #86efac; font-weight:700;"><i data-lucide="check-circle" class="icon-xs"></i> Tất Toán Cho HDV</span>`;
-        }
-        if (t === 'fee' || t === 'platform_fee') {
-          return `<span class="status-badge badge-pending-guide" style="background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc; font-weight:700;"><i data-lucide="percent" class="icon-xs"></i> Thu Phí Sàn 10%</span>`;
-        }
-        if (t === 'refund') {
-          return `<span class="status-badge badge-cancelled" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; font-weight:700;"><i data-lucide="rotate-ccw" class="icon-xs"></i> Hoàn Tiền Cho Khách</span>`;
-        }
-        return `<span class="status-badge">${type}</span>`;
-      }
-
-      function handleRunReconciliation() {
-        const res = window.guidiaStore.performReconciliation();
-        const box = document.getElementById('reconResultBox');
-        if (box && res.success) {
-          box.style.display = 'block';
-          box.innerHTML = `
-      <div class="adm-161">
-        <div>
-          <strong class="adm-124">Kết Quả Đối Soát Cổng Thanh Toán Ngày ${res.reconResult.timestamp}:</strong>
-          <div class="adm-60">
-            Tổng giao dịch kiểm tra: <strong>${res.reconResult.totalCount}</strong> • Khớp thành công: <strong class="adm-33">${res.matchedCount}</strong> • Phát hiện giao dịch lệch: <strong class="adm-35">${res.mismatchCount}</strong>
-          </div>
-        </div>
-        <span class="badge-tag-status ${res.mismatchCount === 0 ? 'status-active' : 'status-suspended'}">
-          ${res.mismatchCount === 0 ? 'Đã Đối Soát Khớp Tuyệt Đối' : 'Cần Xử Lý Lệnh Lệch'}
-        </span>
-      </div>
-    `;
-        }
-        showToast(res.message);
-        renderAdminTransactions();
-      }
-
-      function handleResolveMismatch(txnId) {
-        const res = window.guidiaStore.resolveMismatchTransaction(txnId);
-        if (res.success) {
-          showToast(res.message);
-          renderAdminTransactions();
-          handleRunReconciliation();
         }
       }
 

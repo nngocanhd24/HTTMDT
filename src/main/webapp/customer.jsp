@@ -1024,37 +1024,36 @@
           </div>
 
           <label style="font-weight:700; display:block; margin-bottom:8px; font-size:0.9rem;">
-            Chọn phương thức thanh toán toàn bộ: <span style="color:#e11d48;">*</span>
+            Phương thức thanh toán toàn bộ:
           </label>
 
-          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">
-            <label
-              style="display:flex; align-items:center; gap:10px; padding:10px 14px; border:2px solid #059669; background:#ecfdf5; border-radius:8px; cursor:pointer;">
-              <input type="radio" name="payMethod" value="vietqr" checked>
+          <div style="border:2px solid #059669; background:#ecfdf5; border-radius:10px; padding:14px; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <input type="radio" name="payMethod" value="vietqr" checked style="accent-color:#059669;">
               <div style="flex:1;">
-                <strong>Chuyển khoản QR Ngân hàng (VietQR / Napas247 / VNPAY)</strong>
-                <div style="font-size:0.75rem; color:#64748b;">Tự động nhận diện thanh toán và ký quỹ tức thì qua mã QR
-                </div>
+                <strong style="color:#065f46;">Quét mã QR thanh toán (VietQR / Ngân hàng / Ví điện tử)</strong>
+                <div style="font-size:0.75rem; color:#475569;">Mở ứng dụng Ngân hàng hoặc Ví điện tử để quét mã QR và ký quỹ tức thì</div>
               </div>
-            </label>
-
-            <label
-              style="display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
-              <input type="radio" name="payMethod" value="card">
-              <div style="flex:1;">
-                <strong>Thẻ quốc tế (Visa / MasterCard / JCB)</strong>
-                <div style="font-size:0.75rem; color:#64748b;">Cổng thanh toán quốc tế bảo mật 3D-Secure 2.0</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:14px; background:#ffffff; border:1px solid #d1fae5; border-radius:8px; padding:12px; flex-wrap:wrap; justify-content:center;">
+              <div style="padding:8px; background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; line-height:0;">
+                <svg width="116" height="116" viewBox="0 0 29 29" shape-rendering="crispEdges" aria-label="Mã QR thanh toán">
+                  <rect width="29" height="29" fill="#ffffff"/>
+                  <path fill="#0f172a" d="M1,1h7v7h-7zM2,2v5h5v-5zM3,3h3v3h-3zM21,1h7v7h-7zM22,2v5h5v-5zM23,3h3v3h-3zM1,21h7v7h-7zM2,22v5h5v-5zM3,23h3v3h-3z"/>
+                  <path fill="#0f172a" d="M10,1h2v1h-2zM14,1h1v3h-1zM17,1h2v2h-2zM11,3h2v2h-2zM16,4h3v1h-3zM9,6h2v2h-2zM13,6h3v2h-3zM18,6h1v3h-1z"/>
+                  <path fill="#0f172a" d="M1,10h2v2h-2zM4,9h3v1h-3zM5,11h3v2h-3zM1,14h3v1h-3zM6,14h2v3h-2zM2,16h3v2h-3zM1,19h2v1h-2z"/>
+                  <path fill="#0f172a" d="M10,9h3v2h-3zM15,9h2v3h-2zM19,10h3v1h-3zM24,9h4v2h-4zM11,12h2v3h-2zM14,13h3v2h-3zM19,12h2v2h-2zM23,12h2v3h-2zM26,13h2v2h-2z"/>
+                  <path fill="#0f172a" d="M9,16h2v2h-2zM13,16h3v1h-3zM17,16h2v3h-2zM21,15h2v2h-2zM25,16h3v2h-3zM10,19h4v1h-4zM16,20h2v2h-2zM20,19h3v2h-3zM24,19h2v3h-2z"/>
+                  <path fill="#0f172a" d="M10,21h2v3h-2zM13,22h2v2h-2zM17,23h3v2h-3zM21,22h2v2h-2zM26,21h2v4h-2zM9,26h3v2h-3zM14,25h2v3h-2zM18,26h2v2h-2zM22,25h3v3h-3zM26,26h2v2h-2z"/>
+                </svg>
               </div>
-            </label>
-
-            <label
-              style="display:flex; align-items:center; gap:10px; padding:10px 14px; border:1px solid #cbd5e1; border-radius:8px; cursor:pointer;">
-              <input type="radio" name="payMethod" value="momo">
-              <div style="flex:1;">
-                <strong>Ví điện tử MoMo / ZaloPay</strong>
-                <div style="font-size:0.75rem; color:#64748b;">Xác thực thanh toán 1 chạm trên ứng dụng di động</div>
+              <div style="flex:1; min-width:200px; font-size:0.82rem; color:#334155; line-height:1.6;">
+                <div><strong>Ngân hàng:</strong> MB Bank (VietQR)</div>
+                <div><strong>Chủ tài khoản:</strong> CONG TY GUIDIA ESCROW</div>
+                <div><strong>Số tài khoản:</strong> <span style="font-family:monospace; font-weight:700; color:#0f172a;">8888 6666 2026</span></div>
+                <div><strong>Nội dung CK:</strong> <span id="payQrContent" style="font-family:monospace; font-weight:700; color:#059669;">GUIDIA ESCROW</span></div>
               </div>
-            </label>
+            </div>
           </div>
 
           <!-- Các nút kịch bản kiểm thử tình huống -->
@@ -2258,6 +2257,10 @@
         if (!currentBookingDraft) return;
         closeBookingSummaryModal();
         document.getElementById('payModalAmount').textContent = currentBookingDraft.totalAmount.toLocaleString('vi-VN') + '₫';
+        const qrContentEl = document.getElementById('payQrContent');
+        if (qrContentEl) {
+          qrContentEl.textContent = 'GUIDIA ' + (currentBookingDraft.startDate || '').replace(/-/g, '');
+        }
         document.getElementById('bookingPaymentModal').style.display = 'flex';
         if (window.lucide) window.lucide.createIcons();
       }
@@ -2269,7 +2272,7 @@
 
       // LUỒNG PHỤ A3 (UC06): Thanh toán thất bại
       function simulatePaymentFailure() {
-        showToast('Lỗi thanh toán từ cổng giao dịch: Thẻ/Tài khoản không đủ số dư hoặc giao dịch bị từ chối. Vui lòng thử lại hoặc đổi phương thức thanh toán. Đơn chưa được tạo!', 'error');
+        showToast('Lỗi thanh toán từ cổng giao dịch: Tài khoản không đủ số dư hoặc giao dịch quét QR bị từ chối/hết hạn. Vui lòng quét lại mã QR để thử lại. Đơn chưa được tạo!', 'error');
       }
 
       // LUỒNG PHỤ A6 (UC06): Ngày đã được người khác đặt trong lúc KDL đang thanh toán
